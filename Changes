@@ -1,0 +1,14 @@
+Mon Sep 22 21:26:27 EST 2008
+0.62 - Clarified LICENSE terms in pod, user request
+
+Mon Aug 15 11:19:02 EST 2005
+0.61 - Added Test::Exception prereq
+	 - Debian packaging support 
+
+Mon Dec 20 15:53:16 EST 2004
+0.6  - Allowed for "REF" in tests for 5.8
+     - Changed Module::Build usage
+
+Tue May 11 17:00:06 EST 2004
+0.5  - added README Changes
+     - trim long lines in docs

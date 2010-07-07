@@ -1,0 +1,9 @@
+MANIFEST			This list of files
+Build.PL
+Makefile.PL
+lib/Data/Rmap.pm
+test.pl
+META.yml
+Changes
+README
+INSTALL
