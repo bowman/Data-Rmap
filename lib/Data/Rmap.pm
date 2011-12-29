@@ -89,7 +89,7 @@ By default:
 Optionally:
 
  rmap_scalar rmap_hash rmap_array rmap_ref rmap_to
- :types => [ qw(NONE VALUE HASH ARRAY SCALAR REF OBJECT ALL) ],
+ :types => [ qw(NONE VALUE HASH ARRAY SCALAR REF CODE ALL) ],
  :all => ... # everything
 
 =head1 Functions
@@ -118,8 +118,9 @@ bitwise "or" of whatever types you choose (imported with :types):
           B<NOT> any reference type, see <Scalar::Util>'s reftype:
           perl -MScalar::Util=reftype -le 'print map reftype($_), \1, \\1'
  GLOB   - glob reference, eg. \*x  
-          (scalar, hash and array recursed)
- ALL    - all of the above
+          (scalar, hash and array recursed, code too as of 0.63)
+ ALL    - all of the above (not CODE)
+ CODE   - code references (as of 0.63)
  NONE   - none of the above
 
 So to call the block for arrays and scalar values do:
@@ -127,7 +128,7 @@ So to call the block for arrays and scalar values do:
  use Data::Rmap ':all';         # or qw(:types rmap_to)
  rmap { ... } ARRAY|VALUE, @data_structures;
 
-(ALL & !GLOB) might also be handy.
+(ALL | CODE) and (ALL & !GLOB) might also be handy.
 
 The remainder of the wrappers are given in terms of the $want for rmap_to.
 
@@ -152,9 +153,13 @@ Recurse and call the BLOCK on hash refs.  $want = HASH
 
 Recurse and call the BLOCK on array refs.  $want = ARRAY
 
+=item rmap_code
+
+Recurse and call the BLOCK on code refs.  $want = CODE
+
 =item rmap_ref 
 
-Recurse and call the BLOCK on all references (not GLOBS).  
+Recurse and call the BLOCK on all "normal" references:
 $want = HASH|ARRAY|SCALAR|REF
 
 Note: rmap_ref isn't the same as rmap_to {} REF
@@ -396,9 +401,9 @@ require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(rmap rmap_all cut);
 our %EXPORT_TAGS = (
-	types => [ qw(NONE VALUE HASH ARRAY SCALAR REF GLOB ALL) ],
+	types => [ qw(NONE VALUE HASH ARRAY SCALAR REF GLOB CODE ALL) ],
 );
-our @EXPORT_OK = ( qw(rmap_scalar rmap_hash rmap_array rmap_ref rmap_to),
+our @EXPORT_OK = ( qw(rmap_scalar rmap_hash rmap_array rmap_code rmap_ref rmap_to),
 				@{ $EXPORT_TAGS{types} } );
 
 $EXPORT_TAGS{all} = [ @EXPORT, @EXPORT_OK ];
@@ -417,6 +422,7 @@ sub ARRAY()  { 4 }
 sub SCALAR() { 8 }
 sub REF()    { 16 }
 sub GLOB()   { 32 }
+sub CODE()   { 64 }
 sub ALL()    { VALUE|HASH|ARRAY|SCALAR|REF|GLOB }
 # Others like CODE, Regex, etc are ignored
 
@@ -426,6 +432,7 @@ my %type_bits = (
 	SCALAR => SCALAR,
 	REF => REF,
 	GLOB => GLOB,
+	CODE => CODE,
 	# reftype actually returns undef for:
 	VALUE => VALUE,
 );
@@ -461,6 +468,10 @@ sub rmap_hash (&@) {
 
 sub rmap_array (&@) { 
 	__PACKAGE__->new(shift, ARRAY, {})->_rmap(@_);
+}
+
+sub rmap_code (&@) {
+    __PACKAGE__->new(shift, CODE, {})->_rmap(@_);
 }
 
 sub rmap_ref (&@) { 
@@ -537,8 +548,10 @@ sub _recurse {
 			push @return, $self->_rmap(*$_{ARRAY});
 		defined *$_{HASH} and
 			push @return, $self->_rmap(*$_{HASH});
+		defined *$_{CODE} and
+			push @return, $self->_rmap(*$_{CODE});
 		# Is it always: *f{GLOB} == \*f ?
-		# Also CODE PACKAGE NAME GLOB
+		# Also PACKAGE NAME GLOB
 	}
 	return @return;
 }
