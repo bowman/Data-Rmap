@@ -2,6 +2,7 @@
 use strict;
 use Test::More 'no_plan'; # tests =>$n
 use Test::Exception;
+use Scalar::Util qw(reftype);
 
 BEGIN { use_ok( 'Data::Rmap' ); }
 use Data::Dumper;
@@ -29,7 +30,7 @@ my $orig_dump = Dumper($data);
 rmap { } $data;
 rmap_all { } $data;
 
-# test importing imlicitly
+# test importing implicitly
 use Data::Rmap qw(rmap_scalar);
 rmap_scalar { } $data;
 use Data::Rmap qw(:types rmap_to);
@@ -38,7 +39,7 @@ use Data::Rmap qw(:all);
 rmap_hash { } $data;
 rmap_array { } $data;
 
-# check nothign changed
+# check nothing changed
 ok(Dumper($data) eq $orig_dump, 'nothing changed');
 
 rmap { $_ = "#$_#"; } $data; # all the leaves
@@ -142,9 +143,15 @@ is($got, 'q.1 q.2 q.3.1 q.3.2 q.3.3.1 q.3.4 q.4 q.5.1.1 ',
             'tree numbering w/ recurse');
 
 
+# assign each of the THINGs in GLOB x
+local *x;
+*x = \3;
+*x = sub {};
+*x = {};
+*x = [];
+
 # test each name works as expected
-our $x = 3;
-my @types = (1, [], {}, \\2, \*x);
+my @types = (1, [], {}, \\2, \*x, sub {});
 #$_ = join(' ', rmap_all { $_ } @types); s/\(.*?\)/\\S+/g; diag($_);
 like(join(' ',
     rmap { $_ } @types),
@@ -152,12 +159,14 @@ like(join(' ',
     'rmap types'
 );
 
-like(join(' ',
-    rmap_all { $_ } @types),
-    qr/^1 ARRAY\S+ HASH\S+ (REF|SCALAR)\S+ SCALAR\S+ 2 GLOB\S+ SCALAR\S+ 3$/,
+
+is(join(' ',
+    rmap_all { reftype($_) || $_ } @types),
+    '1 ARRAY HASH REF SCALAR 2 GLOB SCALAR 3 ARRAY HASH',
     'rmap_all types'
 );
 
+# stringification of references, eg. ARRAY(0x1e8ce28) =~ /ARRAY\S+/
 like(join(' ',
     rmap_scalar { $_ } @types),
     qr/^1 (REF|SCALAR)\S+ SCALAR\S+ 2 SCALAR\S+ 3$/,
@@ -166,26 +175,38 @@ like(join(' ',
 
 like(join(' ',
     rmap_hash { $_ } @types),
-    qr/^HASH\S+$/,
+    qr/^HASH\S+ HASH\S+$/,
     'rmap_hash types'
 );
 
 like(join(' ',
     rmap_array { $_ } @types),
-    qr/^ARRAY\S+$/,
+    qr/^ARRAY\S+ ARRAY\S+$/,
     'rmap_array types'
 );
 
 like(join(' ',
-    rmap_ref { $_ } @types),
-    qr/^ARRAY\S+ HASH\S+ (REF|SCALAR)\S+ SCALAR\S+ SCALAR\S+$/,
+    rmap_code { $_ } @types),
+    qr/^CODE\S+ CODE\S+$/,
+    'rmap_array types'
+);
+
+is(join(' ',
+    rmap_ref { reftype($_) || $_ } @types),
+    'ARRAY HASH REF SCALAR SCALAR ARRAY HASH',
     'rmap_ref types'
 );
 
 
 like(join(' ',
     rmap_to { $_ } GLOB|HASH, @types),
-    qr/^HASH\S+ GLOB\S+$/,
+    qr/^HASH\S+ GLOB\S+ HASH\S+$/,
+    'rmap_to GLOB|HASH types'
+);
+
+like(join(' ',
+    rmap_to { $_ } GLOB|CODE, @types),
+    qr/^GLOB\S+ CODE\S+ CODE\S+$/,
     'rmap_to GLOB|HASH types'
 );
 
