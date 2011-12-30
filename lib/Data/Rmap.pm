@@ -88,7 +88,7 @@ By default:
 
 Optionally:
 
- rmap_scalar rmap_hash rmap_array rmap_ref rmap_to
+ rmap_scalar rmap_hash rmap_array rmap_code rmap_ref rmap_to
  :types => [ qw(NONE VALUE HASH ARRAY SCALAR REF CODE ALL) ],
  :all => ... # everything
 
@@ -302,6 +302,21 @@ The $want state described in L<rmap_to>.
  # q.3.4 = three_four
  # q.4 = four
  # q.5.1.1 = five_one_one
+
+ # replace CODE with "<CODE>"
+ $ perl -MData::Rmap=:all -le 'print join ":", rmap_code { $_ } [sub{},sub{}]'
+ <CODE>:<CODE>
+
+ # look inside code refs with PadWalker
+ $ perl -MData::Rmap=:all -MSub::Identify=:all -MPadWalker=:all -MSub::Name
+   use 5.10.0;
+   my $s = sub {}; sub A::a { $s };
+   say join ", ",
+    rmap_code {
+        sub_fullname($_),                       # name string
+        map { $_[0]->recurse } closed_over($_)  # then recurse the sub innards
+    } \*A::a, subname b => sub { $s };
+   # A::a, main::__ANON__, main::b
 
 =head1 Troubleshooting
 
