@@ -10,3 +10,6 @@ requires:
 
 distribution_type: module
 generated_by: ExtUtils::MakeMaker version 6.30_01
+resources:
+  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Rmap
+  repository: https://github.com/bowman/Data-Rmap
