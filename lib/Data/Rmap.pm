@@ -201,16 +201,12 @@ some situations.
 
 =item seen
 
-(Warning: I'm undecided whether this method should be public)
-
 Reference to the HASH used to track where we have visited.
 You may want to modify it in some situations (though I haven't yet).
 Beware circular references.  The (current) convention used for the key
 is in the source.
 
 =item want
-
-(Warning: I'm undecided whether this method should be public)
 
 The $want state described in L<rmap_to>.
 
@@ -323,7 +319,7 @@ The $want state described in L<rmap_to>.
 Beware comma after block:
 
  rmap { print }, 1..3;
-               ^-------- bad news, you get and empty list:
+               ^-------- bad news, you get an empty list:
  rmap(sub { print $_; }), 1..3;
 
 If you don't import a function, perl's confusion may produce:
@@ -343,18 +339,12 @@ Autovivification can lead to "Deep recursion" warnings if you test
 C<exists $_->{this}{that}> instead of
 C<exists $_->{this} && exists $_->{this}{that}>
 as you may follow a long chain of "this"s
-
+Alternatively use the "no autovivification" pragma to avoid this problem.
 
 =head1 TODO
 
-put for @_ iin wrapper to allow parameters in a different wrapper,
+put for @_ in wrapper to allow parameters in a different wrapper,
 solve localizing problem.
-
-Note that the package/class name of the L<State Object>
-is subject to change.
-
-The want and seen accessors may change or become useful
-dynamic mutators.
 
 Store custom localized data about the traversal.
 Seems too difficult and ugly when compare to doing it at the call site.
@@ -365,15 +355,10 @@ Could potentially help localizing needs.  (Maybe only recurse last item)
 
 Benchmark.  Use array based object and/or direct access internally.
 
-rmap_objects shortcut for Scalar::Utils::blessed
-(Let me know of other useful rmap_??? wrappers)
-
 Think about permitting different callback for different types.
 The prototype syntax is a bit too flaky....
 
 Ensure that no memory leaks are possible, leaking the closure.
-
-Read http://www.cs.vu.nl/boilerplate/
 
 =head1 SEE ALSO
 
@@ -383,13 +368,16 @@ Faint traces of treemap:
 
  http://www.perlmonks.org/index.pl?node_id=60829
 
+Update: various alternatives have appear over the years,
+L<Data::Visitor> has a list.
+
 =head1 AUTHOR
 
 Brad Bowman E<lt>rmap@bereft.netE<gt>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2004-2008 Brad Bowman (E<lt>rmap@bereft.netE<gt>).
+Copyright (c) 2004- Brad Bowman (E<lt>rmap@bereft.netE<gt>).
 All rights reserved.
 
 This module is free software; you can redistribute it and/or
