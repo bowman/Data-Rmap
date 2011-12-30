@@ -300,7 +300,7 @@ The $want state described in L<rmap_to>.
  # q.5.1.1 = five_one_one
 
  # replace CODE with "<CODE>"
- $ perl -MData::Rmap=:all -le 'print join ":", rmap_code { $_ } [sub{},sub{}]'
+ $ perl -MData::Rmap=:all -E 'say join ":", rmap_code { "<CODE>" } sub{},sub{}'
  <CODE>:<CODE>
 
  # look inside code refs with PadWalker
