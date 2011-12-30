@@ -1,3 +1,12 @@
+Fri Dec 30 10:52:54 EST 2011
+0.63 -  Added CODE as another :type, rmap_code to only replace CODE refs
+        (in :all export too) and also recurse into the CODE slot of a glob.
+        Note that CODE is not part of ALL, you need rmap_to with (ALL | CODE).
+        Recursing the CODE slot of GLOB *IS BACKWARDS INCOMPATIBLE*
+        (but rare enough and hard to wrok-around).
+
+        steven haryanto requested this in RT#73550, thanks
+
 Mon Sep 22 21:26:27 EST 2008
 0.62 - Clarified LICENSE terms in pod, user request
 
