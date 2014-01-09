@@ -30,5 +30,10 @@ $class->new(
 		'Test::Exception' => 0,
 	},
 	create_makefile_pl => 'traditional',
+	meta_merge => {
+		resources => {
+			repository => 'https://github.com/bowman/Data-Rmap',
+		},
+	},
 )->create_build_script;
 
