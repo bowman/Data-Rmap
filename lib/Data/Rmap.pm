@@ -336,8 +336,8 @@ If there's two paths to an element, one will be taken randomly when
 there is an intervening hash.
 
 Autovivification can lead to "Deep recursion" warnings if you test
-C<exists $_->{this}{that}> instead of
-C<exists $_->{this} && exists $_->{this}{that}>
+C<< exists $_->{this}{that} >> instead of
+C<< exists $_->{this} && exists $_->{this}{that} >>
 as you may follow a long chain of "this"s
 Alternatively use the "no autovivification" pragma to avoid this problem.
 
