@@ -1,15 +1,25 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Data-Rmap
-version:      0.63
-version_from: lib/Data/Rmap.pm
-installdirs:  site
+---
+abstract: 'recursive map, apply a block to a data structure'
+author:
+  - 'Brad Bowman E<lt>rmap@bereft.netE<gt>'
+build_requires: {}
+configure_requires:
+  Module::Build: 0.40
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Data-Rmap
+provides:
+  Data::Rmap:
+    file: lib/Data/Rmap.pm
+    version: 0.64
 requires:
-    Scalar::Util:                  0
-    Test::Exception:               0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30_01
+  Scalar::Util: 0
+  Test::Exception: 0
 resources:
-  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Rmap
+  license: http://dev.perl.org/licenses/
   repository: https://github.com/bowman/Data-Rmap
+version: 0.64
