@@ -1,3 +1,7 @@
+Mon Nov 24 14:01:46 PST 2014
+0.64 -  Pod fixes from RT#51735 (Sergey Romanov + FWIW)
+        Link to github in Build.PL (David Steinbrunner)
+
 Fri Dec 30 10:52:54 EST 2011
 0.63 -  Added CODE as another :type, rmap_code to only replace CODE refs
         (in :all export too) and also recurse into the CODE slot of a glob.
