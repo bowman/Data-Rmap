@@ -1,27 +1,39 @@
-Mon Nov 24 14:01:46 PST 2014
-0.64 -  Pod fixes from RT#51735 (Sergey Romanov + FWIW)
-        Link to github in Build.PL (David Steinbrunner)
+Release history for Perl module Data::Rmap
 
-Fri Dec 30 10:52:54 EST 2011
-0.63 -  Added CODE as another :type, rmap_code to only replace CODE refs
-        (in :all export too) and also recurse into the CODE slot of a glob.
-        Note that CODE is not part of ALL, you need rmap_to with (ALL | CODE).
-        Recursing the CODE slot of GLOB *IS BACKWARDS INCOMPATIBLE*
-        (but rare enough and hard to wrok-around).
+0.64 2014-11-24
 
-        steven haryanto requested this in RT#73550, thanks
+ - Pod fixes from RT#51735 (Sergey Romanov + FWIW)
+ - Link to github in Build.PL (David Steinbrunner)
 
-Mon Sep 22 21:26:27 EST 2008
-0.62 -  Clarified LICENSE terms in pod, user request
+0.63 Not Released
 
-Mon Aug 15 11:19:02 EST 2005
-0.61 -  Added Test::Exception prereq
-     -  Debian packaging support
+ - Added CODE as another :type, rmap_code to only replace CODE refs
+   (in :all export too) and also recurse into the CODE slot of a glob.
+   Note that CODE is not part of ALL, you need rmap_to with (ALL | CODE).
+   Recursing the CODE slot of GLOB *IS BACKWARDS INCOMPATIBLE*
+   (but rare enough and hard to work-around).
 
-Mon Dec 20 15:53:16 EST 2004
-0.6  -  Allowed for "REF" in tests for 5.8
-     -  Changed Module::Build usage
+   steven haryanto requested this in RT#73550, thanks
 
-Tue May 11 17:00:06 EST 2004
-0.5  -  added README Changes
-     -  trim long lines in docs
+0.62 2008-09-22
+
+ - Clarified LICENSE terms in pod, user request
+
+0.61 2004-12-21
+
+ - Added Test::Exception prereq
+ - Debian packaging support
+
+0.6  2004-12-20
+
+ - Allowed for "REF" in tests for 5.8
+ - Changed Module::Build usage
+
+0.5  2004-05-29
+
+ - added README Changes
+ - trim long lines in docs
+
+0.4  2004-05-08
+
+ - initial CPAN release
