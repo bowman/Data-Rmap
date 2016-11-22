@@ -1,5 +1,9 @@
 Release history for Perl module Data::Rmap
 
+0.65 2016-11-22
+
+ - b7d5e4d #5 from pauloscustodio/master
+
 0.64 2014-11-24
 
  - Pod fixes from RT#51735 (Sergey Romanov + FWIW)
