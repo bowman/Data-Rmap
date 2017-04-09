@@ -493,15 +493,14 @@ sub _rmap {
         my ($key, $type);
 
         if($type = reftype($_)) {
-            $key = refaddr $_;
+            $key = _get_key_for_typed();
             $type = $type_bits{$type} or next;
         } else {
-            $key = "V:".refaddr(\$_); # prefix to distinguish from \$_
+            $key = _get_key_for_value();
             $type = VALUE;
         }
 
         next if ( exists $self->seen->{$key} );
-        $self->seen->{$key} = undef;
 
         # Call the $code
         if($self->want & $type) {
@@ -525,10 +524,23 @@ sub _rmap {
             push @return, @got;
         }
 
+        if($type = reftype($_)) {
+            $key = _get_key_for_typed();
+        } else {
+            $key = _get_key_for_value();
+        }
+
+        $self->seen->{$key} = undef;
+
         push @return, $self->_recurse(); # process $_ node
     }
     return @return;
 }
+
+sub _get_key_for_typed { refaddr $_ }
+
+# prefix to distinguish from \$_
+sub _get_key_for_value { 'V:' . refaddr \$_ }
 
 sub _recurse {
     my $self = shift;
